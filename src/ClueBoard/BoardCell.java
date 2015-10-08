@@ -4,6 +4,7 @@ public class BoardCell {
 	private int row;
 	private int column;
 	private char initial;
+	private DoorDirection doorStatus;
 	
 
 	public BoardCell(int row, int column, char initial) {
@@ -11,6 +12,21 @@ public class BoardCell {
 		this.row = row;
 		this.column = column;
 		this.initial = initial;
+	}
+	
+	public boolean isWalkWay()
+	{
+		return false;
+	}
+	
+	public boolean isRoom()
+	{
+		return false;
+	}
+	
+	public boolean isDoorWay()
+	{
+		return false;
 	}
 	
 	public char getInitial() {
@@ -33,6 +49,9 @@ public class BoardCell {
 	public int getColumn() {
 		return column;
 	}
-	
+
+	public DoorDirection getDoorStatus() {
+		return doorStatus;
+	}
 
 }

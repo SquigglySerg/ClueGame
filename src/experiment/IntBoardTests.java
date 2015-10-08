@@ -8,8 +8,8 @@ import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 
-import ClueBoard.BadConfigFormatException;
 import ClueBoard.BoardCell;
+import ClueBoard.DoorDirection;
 import ClueBoard.IntBoard;
 
 public class IntBoardTests {
@@ -53,10 +53,43 @@ public class IntBoardTests {
 	{
 		try{
 			board.loadBoardConfig("ClueLayo.csv");
+			fail("blah");
 		}
-		catch(BadConfigFormatException e) {
-			
+		catch(Exception e) {
+			assertEquals("Error", e.getMessage());
 		}
+	}
+	
+	@Test
+	public void testRoomInitials()
+	{
+		assertEquals('K',board.getCell(0, 0).getInitial());
+		assertEquals('D',board.getCell(0, 11).getInitial());
+		assertEquals('F',board.getCell(19, 5).getInitial());
+		assertEquals('B',board.getCell(0, 21).getInitial());
+		assertEquals('G',board.getCell(12, 18).getInitial());
+		assertEquals('S',board.getCell(11, 20).getInitial());
+		assertEquals('A',board.getCell(1, 19).getInitial());
+		assertEquals('R',board.getCell(2, 13).getInitial());
+		assertEquals('L',board.getCell(2, 8).getInitial());
+		assertEquals('W',board.getCell(11, 6).getInitial());
+		assertEquals('X',board.getCell(12, 10).getInitial());
+	}
+	
+	@Test
+	public void testDoorDirections()
+	{
+		assertEquals(DoorDirection.NONE,board.getCell(0, 0).getDoorStatus());
+		assertEquals(DoorDirection.NONE,board.getCell(0, 1).getDoorStatus());
+		assertEquals(DoorDirection.UP,board.getCell(17, 5).getDoorStatus());
+		assertEquals(DoorDirection.UP,board.getCell(20, 2).getDoorStatus());
+		assertEquals(DoorDirection.LEFT,board.getCell(1, 16).getDoorStatus());
+		assertEquals(DoorDirection.LEFT,board.getCell(9, 18).getDoorStatus());
+		assertEquals(DoorDirection.RIGHT,board.getCell(8, 2).getDoorStatus());
+		assertEquals(DoorDirection.RIGHT,board.getCell(12, 2).getDoorStatus());
+		assertEquals(DoorDirection.DOWN,board.getCell(6, 6).getDoorStatus());
+		assertEquals(DoorDirection.DOWN,board.getCell(7, 13).getDoorStatus());
+		assertEquals(DoorDirection.NONE,board.getCell(7, 16).getDoorStatus());
 	}
 	
 	@Test

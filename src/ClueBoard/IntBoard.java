@@ -103,10 +103,8 @@ public class IntBoard {
 		{
 			//visited.add(i);
 			if(pathLength == 1)
-			{
 				if(!visited.contains(i))
 					targets.add(i);
-			}
 			else
 				if(!visited.contains(i))
 					calcTargets(i, pathLength-1);
