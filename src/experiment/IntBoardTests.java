@@ -8,6 +8,7 @@ import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 
+import ClueBoard.BadConfigFormatException;
 import ClueBoard.BoardCell;
 import ClueBoard.IntBoard;
 
@@ -20,6 +21,42 @@ public class IntBoardTests {
 	{
 		//Will be testing with a 4x4 Grid
 		board = new IntBoard(4,4);
+	}
+	
+	@Test
+	public void testRoomLegend() {
+		board.loadRoomConfig("Legend.txt");
+		assertEquals(11,board.getRooms().size());		// Expected 11 rooms: 9 cards, 2 others
+		assertEquals("Kitchen",board.getRooms().get('K'));
+		assertEquals("Dining Room",board.getRooms().get('D'));
+		assertEquals("Bathroom",board.getRooms().get('B'));
+		assertEquals("Office",board.getRooms().get('F'));
+		assertEquals("Art Gallery",board.getRooms().get('G'));
+		assertEquals("Swimming Pool",board.getRooms().get('S'));
+		assertEquals("Aquarium",board.getRooms().get('A'));
+		assertEquals("Bedroom",board.getRooms().get('R'));
+		assertEquals("Living Room",board.getRooms().get('L'));
+		assertEquals("Closet",board.getRooms().get('X'));
+		assertEquals("Walkway",board.getRooms().get('W'));		
+	}
+	
+	@Test
+	public void testBoardDimensions()
+	{
+		board.loadBoardConfig("ClueLayout.csv");
+		assertEquals(21, board.getROWS());
+		assertEquals(20, board.getCOLUMNS());
+	}
+	
+	@Test
+	public void testExceptionHandling()
+	{
+		try{
+			board.loadBoardConfig("ClueLayo.csv");
+		}
+		catch(BadConfigFormatException e) {
+			
+		}
 	}
 	
 	@Test

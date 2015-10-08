@@ -9,8 +9,11 @@ import java.util.Set;
 public class IntBoard {
 	private int ROWS;
 	private int COLUMNS;
+	private String boardConfigFile;
+	private String roomConfigFile;
 	
 	private Map<BoardCell, LinkedList<BoardCell>> adjMtx;
+	private Map<Character, String> rooms;
 	private Set<BoardCell> visited;
 	private Set<BoardCell> targets;
 	private BoardCell[][]  grid;
@@ -23,16 +26,7 @@ public class IntBoard {
 		this.ROWS = 22;
 		this.COLUMNS = 23;
 		this.grid = new BoardCell[ROWS][COLUMNS];
-		
-		//Initialize Grid
-		for(int i = 0; i < ROWS;i++)
-		{
-			for(int j = 0; j < COLUMNS; j++)
-			{
-				grid[i][j] = new BoardCell(i,j);
-			}
-		}
-		this.calcAdjacencies();
+		initialize();
 	}
 	
 	public IntBoard(int Rows, int Columns){
@@ -43,8 +37,12 @@ public class IntBoard {
 		this.ROWS = Rows;
 		this.COLUMNS = Columns;
 		this.grid = new BoardCell[ROWS][COLUMNS];
-		
-		//Initialize Grid
+		initialize();
+	}
+	
+	public void initialize()
+	{
+		/*//Initialize Grid
 		for(int i = 0; i < ROWS;i++)
 		{
 			for(int j = 0; j < COLUMNS; j++)
@@ -52,9 +50,30 @@ public class IntBoard {
 				grid[i][j] = new BoardCell(i,j);
 			}
 		}
-		this.calcAdjacencies();
+		this.calcAdjacencies();*/
 	}
 	
+	public void loadRoomConfig(String roomConfigFileName)
+	{
+		// this.roomconfigfiel = roomconfigfilename;
+		// read fromfile
+		// read first character - key
+		// read second word - value
+	}
+	
+	public void loadBoardConfig(String boardConfigFileName)
+	{
+		// this.boardconfigfile = boardConfigFileName
+		// read from file
+		// column = numitems.row 1
+		// row = num of rows
+		// put characters in board cell
+	}
+	
+	public Map<Character, String> getRooms() {
+		return rooms;
+	}
+
 	public BoardCell getCell(int row,int column)
 	{
 		return grid[row][column];
@@ -105,5 +124,15 @@ public class IntBoard {
 	{
 		return adjMtx.get(cell);
 	}
+
+	public int getROWS() {
+		return ROWS;
+	}
+
+	public int getCOLUMNS() {
+		return COLUMNS;
+	}
+	
+	
 	
 }
