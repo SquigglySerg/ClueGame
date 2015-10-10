@@ -1,12 +1,15 @@
 package ClueBoard;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 
-public class IntBoard {
+public class Board {
 	private int ROWS;
 	private int COLUMNS;
 	private String boardConfigFile;
@@ -18,7 +21,7 @@ public class IntBoard {
 	private Set<BoardCell> targets;
 	private BoardCell[][]  grid;
 	
-	public IntBoard(){
+	public Board(){
 		super();
 		this.adjMtx = new HashMap<>();
 		this.visited = new HashSet<>();
@@ -26,10 +29,26 @@ public class IntBoard {
 		this.ROWS = 22;
 		this.COLUMNS = 23;
 		this.grid = new BoardCell[ROWS][COLUMNS];
+		boardConfigFile = "ClueLayout.csv";
+		roomConfigFile = "Legend.txt";
 		initialize();
 	}
 	
-	public IntBoard(int Rows, int Columns){
+	public Board(String boardConfigFileName, String roomConfigFileName)
+	{
+		super();
+		this.adjMtx = new HashMap<>();
+		this.visited = new HashSet<>();
+		this.targets = new HashSet<>();
+		this.ROWS = 22;
+		this.COLUMNS = 23;
+		this.grid = new BoardCell[ROWS][COLUMNS];
+		boardConfigFile = boardConfigFileName;
+		roomConfigFile = roomConfigFileName;
+		initialize();
+	}
+	
+	public Board(int Rows, int Columns){
 		super();
 		this.adjMtx = new HashMap<>();
 		this.visited = new HashSet<>();
@@ -37,6 +56,8 @@ public class IntBoard {
 		this.ROWS = Rows;
 		this.COLUMNS = Columns;
 		this.grid = new BoardCell[ROWS][COLUMNS];
+		boardConfigFile = "ClueLayout.csv";
+		roomConfigFile = "Legend.txt";
 		initialize();
 	}
 	
@@ -53,30 +74,37 @@ public class IntBoard {
 		this.calcAdjacencies();*/
 	}
 	
-	public void loadRoomConfig(String roomConfigFileName)
+	public void loadRoomConfig()
 	{
 		// this.roomconfigfiel = roomconfigfilename;
 		// read fromfile
 		// read first character - key
 		// read second word - value
+		
+		FileReader reader;
+		try {
+			reader = new FileReader(roomConfigFile);
+			Scanner scan = new Scanner(reader);
+			for(scan.hasNext())
+			{
+				
+			}			
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 	}
 	
-	public void loadBoardConfig(String boardConfigFileName)
+	public void loadBoardConfig()
 	{
 		// this.boardconfigfile = boardConfigFileName
 		// read from file
 		// column = numitems.row 1
 		// row = num of rows
 		// put characters in board cell
-	}
-	
-	public Map<Character, String> getRooms() {
-		return rooms;
-	}
-
-	public BoardCell getCell(int row,int column)
-	{
-		return grid[row][column];
 	}
 	
 	public void calcAdjacencies()
@@ -112,10 +140,19 @@ public class IntBoard {
 		}
 		visited.remove(initialCell);
 	}
+	
+	public void calcTargets(int row, int column, int pathLength)
+	{
+		calcTargets(grid[row][column], pathLength);
+	}
 
-	public Set<BoardCell> getTargets(BoardCell cell)
+	public Set<BoardCell> getTargets()
 	{
 		return targets;
+	}
+	
+	public LinkedList<BoardCell> getAdjList(int i, int j) {
+		return this.getAdjList(grid[i][j]);
 	}
 	
 	public LinkedList<BoardCell> getAdjList(BoardCell cell)
@@ -126,11 +163,33 @@ public class IntBoard {
 	public int getROWS() {
 		return ROWS;
 	}
+	
+	public int getNumRows()
+	{
+		return ROWS;
+	}
 
 	public int getCOLUMNS() {
 		return COLUMNS;
 	}
 	
+	public int getNumColumns()
+	{
+		return COLUMNS;
+	}
 	
+	public Map<Character, String> getRooms() {
+		return rooms;
+	}
+
+	public BoardCell getCell(int row,int column)
+	{
+		return grid[row][column];
+	}
+	
+	public BoardCell getCellAt(int row,int column)
+	{
+		return grid[row][column];
+	}
 	
 }

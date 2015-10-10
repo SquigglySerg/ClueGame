@@ -1,4 +1,4 @@
-package experiment;
+package clueTest;
 
 import static org.junit.Assert.*;
 
@@ -8,24 +8,24 @@ import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 
+import ClueBoard.Board;
 import ClueBoard.BoardCell;
 import ClueBoard.DoorDirection;
-import ClueBoard.IntBoard;
 
-public class IntBoardTests {
-	private IntBoard board;
+public class BoardTests {
+	private Board board;
 	
 
 	@Before
 	public void setUpTests() 
 	{
 		//Will be testing with a 4x4 Grid
-		board = new IntBoard(4,4);
+		board = new Board(4,4);
 	}
 	
 	@Test
 	public void testRoomLegend() {
-		board.loadRoomConfig("Legend.txt");
+		board.loadRoomConfig();
 		assertEquals(11,board.getRooms().size());		// Expected 11 rooms: 9 cards, 2 others
 		assertEquals("Kitchen",board.getRooms().get('K'));
 		assertEquals("Dining Room",board.getRooms().get('D'));
@@ -43,16 +43,16 @@ public class IntBoardTests {
 	@Test
 	public void testBoardDimensions()
 	{
-		board.loadBoardConfig("ClueLayout.csv");
+		board.loadBoardConfig();
 		assertEquals(21, board.getROWS());
 		assertEquals(20, board.getCOLUMNS());
 	}
 	
 	@Test
-	public void testExceptionHandling()
+	public void testExceptionHandling() //TODO:
 	{
 		try{
-			board.loadBoardConfig("ClueLayo.csv");
+			board.loadBoardConfig();
 			fail("blah");
 		}
 		catch(Exception e) {
@@ -149,7 +149,7 @@ public class IntBoardTests {
 		//Top Left Corner and 3 Away
 		BoardCell cell = board.getCell(0, 0);
 		board.calcTargets(cell, 3);
-		Set<BoardCell> targets = board.getTargets(cell);
+		Set<BoardCell> targets = board.getTargets();
 		//System.out.println("Roll of 3 targets: " + targets);		//Uncomment if test fails
 		assertEquals(6, targets.size());						//Expect 6 Cells
 		//Expected Cells in targets
@@ -164,7 +164,7 @@ public class IntBoardTests {
 		//Top Left Corner and 1 Away
 		cell = board.getCell(0, 0);
 		board.calcTargets(cell, 1);
-		targets = board.getTargets(cell);
+		targets = board.getTargets();
 		//System.out.println("Roll of 1 targets: " + targets);		//Uncomment if test fails
 		assertEquals(2, targets.size());						//Expect 2 Cells
 		//Expected Cells in targets
@@ -175,7 +175,7 @@ public class IntBoardTests {
 		//Top Left Corner and 2 Away
 		cell = board.getCell(0, 0);
 		board.calcTargets(cell, 2);
-		targets = board.getTargets(cell);
+		targets = board.getTargets();
 		//System.out.println("Roll of 2 targets: " + targets);		//Uncomment if test fails
 		assertEquals(3, targets.size());						//Expect 3 Cells ****BUT ITS 4
 		//Expected Cells in targets
@@ -187,7 +187,7 @@ public class IntBoardTests {
 		//Top Left Corner and 4 Away
 		cell = board.getCell(0, 0);
 		board.calcTargets(cell, 4);
-		targets = board.getTargets(cell);
+		targets = board.getTargets();
 		//System.out.println("Roll of 4 targets: " + targets);		//Uncomment if test fails
 		assertEquals(6, targets.size());						//Expect 6 Cells *****BUT ITS 7
 		//Expected Cells in targets
@@ -202,7 +202,7 @@ public class IntBoardTests {
 		//Top Left Corner and 5 Away
 		cell = board.getCell(0, 0);
 		board.calcTargets(cell, 5);
-		targets = board.getTargets(cell);
+		targets = board.getTargets();
 		//System.out.println("Roll of 5 targets: " + targets);		//Uncomment if test fails
 		assertEquals(8, targets.size());						//Expect 8 Cells
 		//Expected Cells in targets
@@ -219,7 +219,7 @@ public class IntBoardTests {
 		//Top Left Corner and 6 Away
 		cell = board.getCell(0, 0);
 		board.calcTargets(cell, 6);
-		targets = board.getTargets(cell);
+		targets = board.getTargets();
 		//System.out.println("Roll of 6 targets: " + targets);		//Uncomment if test fails
 		assertEquals(7, targets.size());						//Expect 7 Cells ******BUT ITS 8
 		//Expected Cells in targets
@@ -235,7 +235,7 @@ public class IntBoardTests {
 		//Middle Section and 3 Away
 		cell = board.getCell(1, 1);
 		board.calcTargets(cell, 3);
-		targets = board.getTargets(cell);
+		targets = board.getTargets();
 		//System.out.println("Roll of 8 targets: " + targets);		//Uncomment if test fails
 		assertEquals(8, targets.size());						//Expect 8 Cells
 		//Expected Cells in targets

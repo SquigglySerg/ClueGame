@@ -24,7 +24,7 @@ public class BoardCell {
 		return false;
 	}
 	
-	public boolean isDoorWay()
+	public boolean isDoorway()
 	{
 		return false;
 	}
@@ -51,6 +51,10 @@ public class BoardCell {
 	}
 
 	public DoorDirection getDoorStatus() {
+		return doorStatus;
+	}
+	
+	public DoorDirection getDoorDirection() {
 		return doorStatus;
 	}
 
