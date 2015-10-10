@@ -1,11 +1,11 @@
-K = Kitchen, Card
-D = Dining Room, Card
-B = Bathroom, Card
-F = Office, Card
-G = Art Gallery, Card
-S = Swimming Pool, Card
-A = Aquarium, Card
-R = Bedroom, Card
-L = Living Room, Card
-X = Closet, Other
-W = Walkway, Other
+K, Kitchen, Card
+D, Dining Room, Card
+B, Bathroom, Card
+F, Office, Card
+G, Art Gallery, Card
+S, Swimming Pool, Card
+A, Aquarium, Card
+R, Bedroom, Card
+L, Living Room, Card
+X, Closet, Other
+W, Walkway, Other

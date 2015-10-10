@@ -85,9 +85,10 @@ public class Board {
 		try {
 			reader = new FileReader(roomConfigFile);
 			Scanner scan = new Scanner(reader);
-			for(scan.hasNext())
+			while(scan.hasNextLine())
 			{
-				
+				String line = scan.nextLine();
+				rooms.put(line.charAt(0), line.substring(line.indexOf(' '), line.lastIndexOf(',')));
 			}			
 			
 		} catch (FileNotFoundException e) {
