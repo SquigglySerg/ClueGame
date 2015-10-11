@@ -21,7 +21,7 @@ public class BoardTests {
 	public void setUpTests() 
 	{
 		//Will be testing with a 4x4 Grid
-		board = new Board("ClueLayout.csv", "ClueLegend.txt");
+		board = new Board("ClueLayout2.csv", "Legend.txt");
 	}
 	
 	@Test
@@ -42,7 +42,7 @@ public class BoardTests {
 	}
 	
 	@Test
-	public void testBoardDimensions()
+	public void testBoardDimensions() throws BadConfigFormatException
 	{
 		board.loadBoardConfig();
 		assertEquals(22, board.getROWS());

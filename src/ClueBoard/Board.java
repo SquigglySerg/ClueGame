@@ -2,6 +2,7 @@ package ClueBoard;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -30,7 +31,7 @@ public class Board {
 		this.COLUMNS = 23;
 		this.grid = new BoardCell[ROWS][COLUMNS];
 		boardConfigFile = "ClueLayout.csv";
-		roomConfigFile = "Legend.txt";
+		roomConfigFile = "ClueLegend.txt";
 		//initialize();
 	}
 	
@@ -40,12 +41,8 @@ public class Board {
 		this.adjMtx = new HashMap<>();
 		this.visited = new HashSet<>();
 		this.targets = new HashSet<>();
-		//this.ROWS = 22;
-		//this.COLUMNS = 23;
-		this.grid = new BoardCell[ROWS][COLUMNS];
 		boardConfigFile = boardConfigFileName;
 		roomConfigFile = roomConfigFileName;
-		//initialize();
 	}
 	
 	public Board(int Rows, int Columns){
@@ -74,40 +71,33 @@ public class Board {
 		}
 	}
 	
-	public void loadRoomConfig() throws BadConfigFormatException
+	public void loadRoomConfig() 
 	{
 		// this.roomconfigfiel = roomconfigfilename;
 		// read fromfile
 		// read first character - key
 		// read second word - value
-		/*
 		FileReader reader;
 		try {
 			reader = new FileReader(roomConfigFile);
 			Scanner scan = new Scanner(reader);
-			String line = scan.nextLine();
-			System.out.println(line);
-			char check = line.charAt(0);
-			System.out.println(check);
-			String check2 = line.substring(line.indexOf(' ') + 1, line.lastIndexOf(','));
-			System.out.println(check2);
-			rooms.put(line.charAt(0), line.substring(line.indexOf(' '), line.lastIndexOf(',')));
-			this.COLUMNS = 22;
+			rooms = new HashMap<Character, String>();
 			while(scan.hasNextLine())
 			{
-				line = scan.nextLine();
-				rooms.put(line.charAt(0), line.substring(line.indexOf(' '), line.lastIndexOf(',')));
+				String line = scan.nextLine();
+				//System.out.println(line.charAt(0));
+				//System.out.println(line.substring(line.indexOf(' ') + 1, line.lastIndexOf(',')));
+				rooms.put(line.charAt(0), line.substring(line.indexOf(' ') + 1, line.lastIndexOf(',')));
 			}
 			scan.close();
-			this.ROWS = rooms.size();
 			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}*/
+		}
 	}
 	
-	public void loadBoardConfig()
+	public void loadBoardConfig() throws BadConfigFormatException
 	{
 		// this.boardconfigfile = boardConfigFileName
 		// read from file
@@ -115,30 +105,57 @@ public class Board {
 		// row = num of rows
 		// put characters in board cell
 		FileReader reader;
-		int rowCount = 0;
 		int columnCount = 0;
+		ArrayList<String> hold = new ArrayList<>();
+		
 	try {
-		reader = new FileReader(boardConfigFile);
-		Scanner scan = new Scanner(reader);
-		while(scan.hasNextLine())
-		{
-			String line = scan.nextLine();
-			line = line.replace(',', ' ');
-			for(int i = 0; i < line.length(); i++) {
-				if(line.charAt(i) != ' ') {
-					grid[rowCount][i] = new BoardCell(rowCount, i, line.charAt(i));
+			reader = new FileReader(boardConfigFile);
+			Scanner scan = new Scanner(reader);
+			String test = scan.nextLine();
+			hold.add(test);
+			int count = 0;
+			while(count < test.length()) {
+				if(test.charAt(count) != ','){
 					columnCount++;
 				}
+				count++;
 			}
-			rowCount++;
+			while(scan.hasNextLine()) {
+				String line = scan.nextLine();
+				hold.add(line);
+				count = 0;
+				int check = 0;
+				while(count < test.length()) {
+					if(test.charAt(count) != ','){
+						check++;
+					}
+					count++;
+				}
+				if(check != count) {
+					throw new BadConfigFormatException();
+				}
+				System.out.println(line);
+			}
+			scan.close();
+			this.ROWS = hold.size();
+			this.COLUMNS = columnCount;
+			int rowCount = 0;
+			columnCount = 0;
+			grid = new BoardCell[this.ROWS][this.COLUMNS];
+			for(String piece : hold) {
+				for(int i = 0; i < piece.length(); i++) {
+					if(piece.charAt(i) != ',') {
+						grid[rowCount][columnCount] = new BoardCell(rowCount, columnCount, piece.charAt(i));
+						System.out.println(grid[rowCount][columnCount]);
+						System.out.println("D");
+					}
+				}
+			}
+			
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 		}
-		scan.close();
-		this.ROWS = rowCount;
-		this.COLUMNS = columnCount;
-	} catch (FileNotFoundException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
 	}
 	
 	public void calcAdjacencies()
