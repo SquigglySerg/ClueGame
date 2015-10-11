@@ -31,7 +31,7 @@ public class Board {
 		this.grid = new BoardCell[ROWS][COLUMNS];
 		boardConfigFile = "ClueLayout.csv";
 		roomConfigFile = "Legend.txt";
-		initialize();
+		//initialize();
 	}
 	
 	public Board(String boardConfigFileName, String roomConfigFileName)
@@ -40,12 +40,12 @@ public class Board {
 		this.adjMtx = new HashMap<>();
 		this.visited = new HashSet<>();
 		this.targets = new HashSet<>();
-		this.ROWS = 22;
-		this.COLUMNS = 23;
+		//this.ROWS = 22;
+		//this.COLUMNS = 23;
 		this.grid = new BoardCell[ROWS][COLUMNS];
 		boardConfigFile = boardConfigFileName;
 		roomConfigFile = roomConfigFileName;
-		initialize();
+		//initialize();
 	}
 	
 	public Board(int Rows, int Columns){
@@ -58,45 +58,53 @@ public class Board {
 		this.grid = new BoardCell[ROWS][COLUMNS];
 		boardConfigFile = "ClueLayout.csv";
 		roomConfigFile = "Legend.txt";
-		initialize();
+		//initialize();
 	}
 	
 	public void initialize()
 	{
-		/*//Initialize Grid
-		for(int i = 0; i < ROWS;i++)
-		{
-			for(int j = 0; j < COLUMNS; j++)
-			{
-				grid[i][j] = new BoardCell(i,j);
-			}
+		//Initialize Grid
+		try {
+			this.loadRoomConfig();
+			this.loadBoardConfig();
+			this.calcAdjacencies();
 		}
-		this.calcAdjacencies();*/
+		catch(BadConfigFormatException e) {
+			System.out.println(e.getStackTrace());
+		}
 	}
 	
-	public void loadRoomConfig()
+	public void loadRoomConfig() throws BadConfigFormatException
 	{
 		// this.roomconfigfiel = roomconfigfilename;
 		// read fromfile
 		// read first character - key
 		// read second word - value
-		
+		/*
 		FileReader reader;
 		try {
 			reader = new FileReader(roomConfigFile);
 			Scanner scan = new Scanner(reader);
+			String line = scan.nextLine();
+			System.out.println(line);
+			char check = line.charAt(0);
+			System.out.println(check);
+			String check2 = line.substring(line.indexOf(' ') + 1, line.lastIndexOf(','));
+			System.out.println(check2);
+			rooms.put(line.charAt(0), line.substring(line.indexOf(' '), line.lastIndexOf(',')));
+			this.COLUMNS = 22;
 			while(scan.hasNextLine())
 			{
-				String line = scan.nextLine();
+				line = scan.nextLine();
 				rooms.put(line.charAt(0), line.substring(line.indexOf(' '), line.lastIndexOf(',')));
-			}			
+			}
+			scan.close();
+			this.ROWS = rooms.size();
 			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		
-		
+		}*/
 	}
 	
 	public void loadBoardConfig()
@@ -106,6 +114,31 @@ public class Board {
 		// column = numitems.row 1
 		// row = num of rows
 		// put characters in board cell
+		FileReader reader;
+		int rowCount = 0;
+		int columnCount = 0;
+	try {
+		reader = new FileReader(boardConfigFile);
+		Scanner scan = new Scanner(reader);
+		while(scan.hasNextLine())
+		{
+			String line = scan.nextLine();
+			line = line.replace(',', ' ');
+			for(int i = 0; i < line.length(); i++) {
+				if(line.charAt(i) != ' ') {
+					grid[rowCount][i] = new BoardCell(rowCount, i, line.charAt(i));
+					columnCount++;
+				}
+			}
+			rowCount++;
+		}
+		scan.close();
+		this.ROWS = rowCount;
+		this.COLUMNS = columnCount;
+	} catch (FileNotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 	}
 	
 	public void calcAdjacencies()
