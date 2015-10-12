@@ -14,6 +14,24 @@ public class BoardCell {
 		this.initial = initial;
 	}
 	
+	public void setDoorDirection(char direction) {
+		if(direction == 'U') {
+			doorStatus = DoorDirection.UP;
+		}
+		else if(direction == 'D') {
+			doorStatus = DoorDirection.DOWN;
+		}
+		else if(direction == 'L') {
+			doorStatus = DoorDirection.LEFT;
+		}
+		else if(direction == 'R') {
+			doorStatus = DoorDirection.RIGHT;
+		}
+		else if(direction == 'N') {
+			doorStatus = DoorDirection.NONE;
+		}
+	}
+	
 	public boolean isWalkWay()
 	{
 		return false;
@@ -21,11 +39,16 @@ public class BoardCell {
 	
 	public boolean isRoom()
 	{
+		
 		return false;
 	}
 	
 	public boolean isDoorway()
 	{
+		System.out.println(doorStatus);
+		if(this.doorStatus != DoorDirection.NONE) {
+			return true;
+		}
 		return false;
 	}
 	

@@ -14,7 +14,7 @@ import ClueBoard.BoardCell;
 import ClueBoard.DoorDirection;
 
 public class BoardTests {
-	private Board board;
+	private static Board board;
 	
 
 	@Before
@@ -22,11 +22,11 @@ public class BoardTests {
 	{
 		//Will be testing with a 4x4 Grid
 		board = new Board("ClueLayout2.csv", "Legend.txt");
+		board.initialize();
 	}
 	
 	@Test
 	public void testRoomLegend() throws BadConfigFormatException {
-		board.loadRoomConfig();
 		assertEquals(11,board.getRooms().size());		// Expected 11 rooms: 9 cards, 2 others
 		assertEquals("Kitchen",board.getRooms().get('K'));
 		assertEquals("Dining Room",board.getRooms().get('D'));
@@ -44,7 +44,6 @@ public class BoardTests {
 	@Test
 	public void testBoardDimensions() throws BadConfigFormatException
 	{
-		board.loadBoardConfig();
 		assertEquals(22, board.getROWS());
 		assertEquals(23, board.getCOLUMNS());
 	}

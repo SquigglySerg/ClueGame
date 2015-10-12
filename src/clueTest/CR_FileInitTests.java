@@ -37,6 +37,7 @@ public class CR_FileInitTests {
 		// Initialize will load BOTH config files 
 		board.initialize();
 	}
+	
 	@Test
 	public void testRooms() {
 		// rooms is static, see discussion in lab writeup

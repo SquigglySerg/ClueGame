@@ -85,14 +85,13 @@ public class Board {
 			while(scan.hasNextLine())
 			{
 				String line = scan.nextLine();
-				//System.out.println(line.charAt(0));
-				//System.out.println(line.substring(line.indexOf(' ') + 1, line.lastIndexOf(',')));
+				System.out.println(line.charAt(0));
+				System.out.println(line.substring(line.indexOf(' ') + 1, line.lastIndexOf(',')));
 				rooms.put(line.charAt(0), line.substring(line.indexOf(' ') + 1, line.lastIndexOf(',')));
 			}
 			scan.close();
 			
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -104,56 +103,95 @@ public class Board {
 		// column = numitems.row 1
 		// row = num of rows
 		// put characters in board cell
+		System.out.println("Checkpoint");
+		System.out.println();
 		FileReader reader;
 		int columnCount = 1;
+		// ArrayList to hold each line temporarily also to count amount of rows
 		ArrayList<String> hold = new ArrayList<>();
 		
 	try {
 			reader = new FileReader(boardConfigFile);
 			Scanner scan = new Scanner(reader);
+			// Takes first line of the layout and adds into the arraylist
 			String test = scan.nextLine();
 			hold.add(test);
 			int count = 0;
+			// Takes the first line of the layout and calculates the size of Columns using commas since amount of
+			// initials should equal all commas + 1
 			while(count < test.length()) {
 				if(test.charAt(count) == ','){
 					columnCount++;
 				}
 				count++;
 			}
+			
+			// Then goes through the rest of the layout collecting each line
 			while(scan.hasNextLine()) {
 				String line = scan.nextLine();
 				hold.add(line);
 				count = 0;
 				int check = 1;
+				// Once again checking all the commas in the line for the column size
 				while(count < line.length()) {
 					if(line.charAt(count) == ','){
 						check++;
 					}
 					count++;
 				}
+				
+				// Checks to see if a column size equals the first column size
+				// if false returns exception
 				if(check != columnCount) {
 					throw new BadConfigFormatException();
 				}
 			}
 			scan.close();
+			
+			// Uses the arraylist size as ROWS and the column count at the beginning for COLUMNS
 			this.ROWS = hold.size();
 			this.COLUMNS = columnCount;
+			// Generates the initial setup for the grid
 			grid = new BoardCell[this.ROWS][this.COLUMNS];
+			// starts at the top row
 			int row = 0;
+			// Takes each line and goes through to find initials and assign them into the grid
 			for(String piece : hold) {
 				int column = 0;
+				// Since the first item in the string will never be comma, it checks to see if it is 
+				// a key for the rooms (Legend check)
+				System.out.println(rooms.get(piece.charAt(0)));
 				if(rooms.get(piece.charAt(0)) != null) {
-				grid[row][column] = new BoardCell(row, column, piece.charAt(0));
+					grid[row][column] = new BoardCell(row, column, piece.charAt(0));
+					if(1 < piece.length() && piece.charAt(1) != ',' && piece.charAt(1) != 'N') {
+						grid[row][column].setDoorDirection(piece.charAt(1));
+					}
+					else {
+						grid[row][column].setDoorDirection('N');
+					}
 				}
 				else {
 					throw new BadConfigFormatException();
 				}
+				column++;
+				
+				//Then it cycles through the string trying to find commas and taking the char after
 				for(int i = 1; i < piece.length(); i++) {
 					if(piece.charAt(i) == ',') {
+						// checks to see if the char is a key for rooms
 						if(rooms.get(piece.charAt(i + 1)) == null) {
 							throw new BadConfigFormatException();
 						}
+						// adds new BoardCell
 						grid[row][column] = new BoardCell(row, column, piece.charAt(i + 1));
+						// then checks to see if there another char after signifying a door and sets door status
+						if(i + 2 < piece.length() && piece.charAt(i + 2) != ',' && piece.charAt(i + 2) != 'N') {
+							grid[row][column].setDoorDirection(piece.charAt(i + 2));
+						}
+						else {
+							grid[row][column].setDoorDirection('N');
+						}
+						System.out.println(grid[row][column].getDoorDirection() + " " + grid[row][column].getInitial());
 						column++;
 					}
 				}
