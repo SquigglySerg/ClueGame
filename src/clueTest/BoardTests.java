@@ -20,7 +20,7 @@ public class BoardTests {
 	@Before
 	public void setUpTests() 
 	{
-		board = new Board("ClueLayout2","Legend.txt");
+		board = new Board("ClueLayout2.csv","Legend.txt");
 		board.initialize();
 	}
 	
@@ -90,7 +90,7 @@ public class BoardTests {
 		assertEquals(DoorDirection.NONE,board.getCell(7, 16).getDoorStatus());
 	}
 	
-	@Test
+	/*@Test //These are meant for a 4*4 board
 	public void testCalcAdjacencies()
 	{	//Top Left Corner
 		BoardCell cell = board.getCell(0,0);
@@ -244,5 +244,5 @@ public class BoardTests {
 		assertTrue(targets.contains(board.getCell(2, 3)));
 		assertTrue(targets.contains(board.getCell(3, 0)));
 		assertTrue(targets.contains(board.getCell(3, 2)));
-	}
+	}*/
 }
