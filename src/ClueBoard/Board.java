@@ -27,9 +27,9 @@ public class Board {
 		this.adjMtx = new HashMap<>();
 		this.visited = new HashSet<>();
 		this.targets = new HashSet<>();
+		this.grid = new BoardCell[ROWS][COLUMNS];
 		this.ROWS = 22;
 		this.COLUMNS = 23;
-		this.grid = new BoardCell[ROWS][COLUMNS];
 		boardConfigFile = "ClueLayout.csv";
 		roomConfigFile = "ClueLegend.txt";
 		//initialize();
@@ -45,19 +45,6 @@ public class Board {
 		roomConfigFile = roomConfigFileName;
 	}
 	
-	public Board(int Rows, int Columns){
-		super();
-		this.adjMtx = new HashMap<>();
-		this.visited = new HashSet<>();
-		this.targets = new HashSet<>();
-		this.ROWS = Rows;
-		this.COLUMNS = Columns;
-		this.grid = new BoardCell[ROWS][COLUMNS];
-		boardConfigFile = "ClueLayout.csv";
-		roomConfigFile = "Legend.txt";
-		//initialize();
-	}
-	
 	public void initialize()
 	{
 		//Initialize Grid
@@ -67,17 +54,13 @@ public class Board {
 			this.calcAdjacencies();
 		}
 		catch(Exception e) {
-			System.out.println(e.getStackTrace());
+			System.out.println(e.getMessage());
 		}
 		
 	}
 	
 	public void loadRoomConfig() throws BadConfigFormatException, FileNotFoundException
 	{
-		// this.roomconfigfiel = roomconfigfilename;
-		// read fromfile
-		// read first character - key
-		// read second word - value
 		FileReader reader;
 		reader = new FileReader(roomConfigFile);
 		Scanner scan = new Scanner(reader);
@@ -86,15 +69,15 @@ public class Board {
 		{
 			String line = scan.nextLine();
 			if(!(line.charAt(0) >= 'A' && line.charAt(0) <= 'Z')){
-				throw new BadConfigFormatException("Legend/RoomConfig File has an incorrect character as a room initial. Should be in [A-Z]");
+				throw new BadConfigFormatException("Legend/RoomConfig File has an incorrect character '" + line.charAt(0) + "' as a room initial. Should be in [A-Z].");
 			}
 			if( (line.substring(line.indexOf(' ') + 1, line.lastIndexOf(',')).contains(",")) )
 			{
-				throw new BadConfigFormatException("Only two commas expected per line");
+				throw new BadConfigFormatException("Legend/RoomConfig File should only two commas expected per line. '" + line.substring(line.indexOf(' ') + 1, line.lastIndexOf(',')) + "' is being added as a room.");
 			}
-			if( !(line.substring(line.lastIndexOf(',') + 2).equals("Other")) || !(line.substring(line.lastIndexOf(',') + 2).equals("Card"))  )
+			if( !(line.substring(line.lastIndexOf(',') + 1).contains("Other") || line.substring(line.lastIndexOf(',') + 1).contains("Card"))  )
 			{
-				throw new BadConfigFormatException("Line does not contain 'Card' or 'Other' ");
+				throw new BadConfigFormatException("Legend/RoomConfig File a line does not contain 'Card' or 'Other'. Contains: '" + (line.substring(line.lastIndexOf(',') + 1)) +"'");
 			}
 			rooms.put(line.charAt(0), line.substring(line.indexOf(' ') + 1, line.lastIndexOf(',')));
 		}
@@ -102,108 +85,206 @@ public class Board {
 	}
 	
 	public void loadBoardConfig() throws BadConfigFormatException
+
 	{
+
 		// this.boardconfigfile = boardConfigFileName
+
 		// read from file
+
 		// column = numitems.row 1
+
 		// row = num of rows
+
 		// put characters in board cell
-		//System.out.println("Checkpoint");
-		//System.out.println();
+
+		// System.out.println("Checkpoint");
+
+		// System.out.println();
+
 		FileReader reader;
+
 		int columnCount = 1;
+
 		// ArrayList to hold each line temporarily also to count amount of rows
+
 		ArrayList<String> hold = new ArrayList<>();
-		
-	try {
+
+		try {
+
 			reader = new FileReader(boardConfigFile);
+
 			Scanner scan = new Scanner(reader);
+
 			// Takes first line of the layout and adds into the arraylist
+
 			String test = scan.nextLine();
+
 			hold.add(test);
+
 			int count = 0;
-			// Takes the first line of the layout and calculates the size of Columns using commas since amount of
+
+			// Takes the first line of the layout and calculates the size of
+			// Columns using commas since amount of
+
 			// initials should equal all commas + 1
-			while(count < test.length()) {
-				if(test.charAt(count) == ',' || test.charAt(count) == '\n' ){
+
+			while (count < test.length()) {
+
+				if (test.charAt(count) == ',' || test.charAt(count) == '\n') {
+
 					columnCount++;
+
 				}
+
 				count++;
+
 			}
-			
+
 			// Then goes through the rest of the layout collecting each line
-			while(scan.hasNextLine()) {
+
+			while (scan.hasNextLine()) {
+
 				String line = scan.nextLine();
+
 				hold.add(line);
+
 				count = 0;
+
 				int check = 1;
-				// Once again checking all the commas in the line for the column size
-				while(count < line.length()) {
-					if(line.charAt(count) == ',' || line.charAt(count) == '\n'){
+
+				// Once again checking all the commas in the line for the column
+				// size
+
+				while (count < line.length()) {
+
+					if (line.charAt(count) == ',' || line.charAt(count) == '\n') {
+
 						check++;
+
 					}
+
 					count++;
+
 				}
-				
+
 				// Checks to see if a column size equals the first column size
+
 				// if false returns exception
-				if(check != columnCount) {
+
+				if (check != columnCount) {
+
 					throw new BadConfigFormatException();
+
 				}
-				
+
 			}
+
 			scan.close();
-			
-			// Uses the arraylist size as ROWS and the column count at the beginning for COLUMNS
+
+			// Uses the arraylist size as ROWS and the column count at the
+			// beginning for COLUMNS
+
 			this.ROWS = hold.size();
+
 			this.COLUMNS = columnCount;
+
 			// Generates the initial setup for the grid
+
 			grid = new BoardCell[this.ROWS][this.COLUMNS];
+
 			// starts at the top row
+
 			int row = 0;
-			// Takes each line and goes through to find initials and assign them into the grid
-			for(String piece : hold) {
+
+			// Takes each line and goes through to find initials and assign them
+			// into the grid
+
+			for (String piece : hold) {
+
 				int column = 0;
-				// Since the first item in the string will never be comma, it checks to see if it is 
+
+				// Since the first item in the string will never be comma, it
+				// checks to see if it is
+
 				// a key for the rooms (Legend check
-				if(rooms.get(piece.charAt(0)) != null) {
+
+				if (rooms.get(piece.charAt(0)) != null) {
+
 					grid[row][column] = new BoardCell(row, column, piece.charAt(0));
-					if(1 < piece.length() && piece.charAt(1) != ',' && piece.charAt(1) != 'N') {
+
+					if (1 < piece.length() && piece.charAt(1) != ',' && piece.charAt(1) != 'N') {
+
 						grid[row][column].setDoorDirection(piece.charAt(1));
+
 					}
+
 					else {
+
 						grid[row][column].setDoorDirection('N');
+
 					}
+
 				}
+
 				else {
+
 					throw new BadConfigFormatException();
+
 				}
+
 				column++;
-				
-				//Then it cycles through the string trying to find commas and taking the char after
-				for(int i = 1; i < piece.length(); i++) {
-					if(piece.charAt(i) == ',') {
+
+				// Then it cycles through the string trying to find commas and
+				// taking the char after
+
+				for (int i = 1; i < piece.length(); i++) {
+
+					if (piece.charAt(i) == ',') {
+
 						// checks to see if the char is a key for rooms
-						if(rooms.get(piece.charAt(i + 1)) == null) {
+
+						if (rooms.get(piece.charAt(i + 1)) == null) {
+
 							throw new BadConfigFormatException();
+
 						}
+
 						// adds new BoardCell
+
 						grid[row][column] = new BoardCell(row, column, piece.charAt(i + 1));
-						// then checks to see if there another char after signifying a door and sets door status
-						if(i + 2 < piece.length() && piece.charAt(i + 2) != ',' && piece.charAt(i + 2) != 'N') {
+
+						// then checks to see if there another char after
+						// signifying a door and sets door status
+
+						if (i + 2 < piece.length() && piece.charAt(i + 2) != ',' && piece.charAt(i + 2) != 'N') {
+
 							grid[row][column].setDoorDirection(piece.charAt(i + 2));
+
 						}
+
 						else {
+
 							grid[row][column].setDoorDirection('N');
+
 						}
+
 						column++;
+
 					}
+
 				}
+
 				row++;
+
 			}
+
 		} catch (FileNotFoundException e) {
+
 			e.printStackTrace();
+
 		}
+
 	}
 	
 	public void calcAdjacencies()

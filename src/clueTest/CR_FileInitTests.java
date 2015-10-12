@@ -43,6 +43,7 @@ public class CR_FileInitTests {
 		// rooms is static, see discussion in lab writeup
 		Map<Character, String> rooms = board.getRooms();
 		// Ensure we read the correct number of rooms
+		System.out.println(rooms.size());
 		assertEquals(NUM_ROOMS, rooms.size());
 		// To ensure data is correctly loaded, test retrieving a few rooms 
 		// from the hash, including the first and last in the file and a few others

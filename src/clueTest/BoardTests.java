@@ -20,8 +20,7 @@ public class BoardTests {
 	@Before
 	public void setUpTests() 
 	{
-		//Will be testing with a 4x4 Grid
-		board = new Board("ClueLayout2.csv", "Legend.txt");
+		board = new Board("ClueLayout2","Legend.txt");
 		board.initialize();
 	}
 	
