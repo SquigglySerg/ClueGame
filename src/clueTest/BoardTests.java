@@ -2,15 +2,11 @@ package clueTest;
 
 import static org.junit.Assert.*;
 
-import java.util.LinkedList;
-import java.util.Set;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import ClueBoard.BadConfigFormatException;
 import ClueBoard.Board;
-import ClueBoard.BoardCell;
 import ClueBoard.DoorDirection;
 
 public class BoardTests {
