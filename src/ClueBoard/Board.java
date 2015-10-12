@@ -105,7 +105,7 @@ public class Board {
 		// row = num of rows
 		// put characters in board cell
 		FileReader reader;
-		int columnCount = 0;
+		int columnCount = 1;
 		ArrayList<String> hold = new ArrayList<>();
 		
 	try {
@@ -115,7 +115,7 @@ public class Board {
 			hold.add(test);
 			int count = 0;
 			while(count < test.length()) {
-				if(test.charAt(count) != ','){
+				if(test.charAt(count) == ','){
 					columnCount++;
 				}
 				count++;
@@ -124,35 +124,41 @@ public class Board {
 				String line = scan.nextLine();
 				hold.add(line);
 				count = 0;
-				int check = 0;
-				while(count < test.length()) {
-					if(test.charAt(count) != ','){
+				int check = 1;
+				while(count < line.length()) {
+					if(line.charAt(count) == ','){
 						check++;
 					}
 					count++;
 				}
-				if(check != count) {
+				if(check != columnCount) {
 					throw new BadConfigFormatException();
 				}
-				System.out.println(line);
 			}
 			scan.close();
 			this.ROWS = hold.size();
 			this.COLUMNS = columnCount;
-			int rowCount = 0;
-			columnCount = 0;
 			grid = new BoardCell[this.ROWS][this.COLUMNS];
+			int row = 0;
 			for(String piece : hold) {
-				for(int i = 0; i < piece.length(); i++) {
-					if(piece.charAt(i) != ',') {
-						grid[rowCount][columnCount] = new BoardCell(rowCount, columnCount, piece.charAt(i));
-						System.out.println(grid[rowCount][columnCount]);
-						System.out.println("D");
+				int column = 0;
+				if(rooms.get(piece.charAt(0)) != null) {
+				grid[row][column] = new BoardCell(row, column, piece.charAt(0));
+				}
+				else {
+					throw new BadConfigFormatException();
+				}
+				for(int i = 1; i < piece.length(); i++) {
+					if(piece.charAt(i) == ',') {
+						if(rooms.get(piece.charAt(i + 1)) == null) {
+							throw new BadConfigFormatException();
+						}
+						grid[row][column] = new BoardCell(row, column, piece.charAt(i + 1));
+						column++;
 					}
 				}
+				row++;
 			}
-			
-			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
