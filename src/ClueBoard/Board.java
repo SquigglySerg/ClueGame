@@ -66,41 +66,39 @@ public class Board {
 			this.loadBoardConfig();
 			this.calcAdjacencies();
 		}
-		catch(BadConfigFormatException e) {
+		catch(Exception e) {
 			System.out.println(e.getStackTrace());
 		}
+		
 	}
 	
-	public void loadRoomConfig() throws BadConfigFormatException 
+	public void loadRoomConfig() throws BadConfigFormatException, FileNotFoundException
 	{
 		// this.roomconfigfiel = roomconfigfilename;
 		// read fromfile
 		// read first character - key
 		// read second word - value
 		FileReader reader;
-		try {
-			reader = new FileReader(roomConfigFile);
-			Scanner scan = new Scanner(reader);
-			rooms = new HashMap<Character, String>();
-			while(scan.hasNextLine())
-			{
-				String line = scan.nextLine();
-//				int count = 0;
-//				for(int i = 0; i < line.length(); i++) {
-//					if(line.charAt(i) == ',') {
-//						count++;
-//					}
-//				}
-//				if(count != 3) {
-//					throw new BadConfigFormatException();
-//				}
-				rooms.put(line.charAt(0), line.substring(line.indexOf(' ') + 1, line.lastIndexOf(',')));
+		reader = new FileReader(roomConfigFile);
+		Scanner scan = new Scanner(reader);
+		rooms = new HashMap<Character, String>();
+		while(scan.hasNextLine())
+		{
+			String line = scan.nextLine();
+			if(!(line.charAt(0) >= 'A' && line.charAt(0) <= 'Z')){
+				throw new BadConfigFormatException("Legend/RoomConfig File has an incorrect character as a room initial. Should be in [A-Z]");
 			}
-			scan.close();
-			
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			if( (line.substring(line.indexOf(' ') + 1, line.lastIndexOf(',')).contains(",")) )
+			{
+				throw new BadConfigFormatException("Only two commas expected per line");
+			}
+			if( !(line.substring(line.lastIndexOf(',') + 2).equals("Other")) || !(line.substring(line.lastIndexOf(',') + 2).equals("Card"))  )
+			{
+				throw new BadConfigFormatException("Line does not contain 'Card' or 'Other' ");
+			}
+			rooms.put(line.charAt(0), line.substring(line.indexOf(' ') + 1, line.lastIndexOf(',')));
 		}
+		scan.close();
 	}
 	
 	public void loadBoardConfig() throws BadConfigFormatException
@@ -127,7 +125,7 @@ public class Board {
 			// Takes the first line of the layout and calculates the size of Columns using commas since amount of
 			// initials should equal all commas + 1
 			while(count < test.length()) {
-				if(test.charAt(count) == ','){
+				if(test.charAt(count) == ',' || test.charAt(count) == '\n' ){
 					columnCount++;
 				}
 				count++;
@@ -141,7 +139,7 @@ public class Board {
 				int check = 1;
 				// Once again checking all the commas in the line for the column size
 				while(count < line.length()) {
-					if(line.charAt(count) == ','){
+					if(line.charAt(count) == ',' || line.charAt(count) == '\n'){
 						check++;
 					}
 					count++;

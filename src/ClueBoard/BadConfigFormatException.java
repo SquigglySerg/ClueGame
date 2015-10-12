@@ -6,5 +6,10 @@ public class BadConfigFormatException extends Exception{
 	{
 		super("Error");
 	}
+	
+	public BadConfigFormatException(String message)
+	{
+		super(message);
+	}
 
 }
