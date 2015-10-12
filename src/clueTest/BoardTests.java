@@ -2,11 +2,15 @@ package clueTest;
 
 import static org.junit.Assert.*;
 
+import java.util.LinkedList;
+import java.util.Set;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import ClueBoard.BadConfigFormatException;
 import ClueBoard.Board;
+import ClueBoard.BoardCell;
 import ClueBoard.DoorDirection;
 
 public class BoardTests {
@@ -84,6 +88,205 @@ public class BoardTests {
 		assertEquals(DoorDirection.DOWN,board.getCell(6, 6).getDoorStatus());
 		assertEquals(DoorDirection.DOWN,board.getCell(7, 13).getDoorStatus());
 		assertEquals(DoorDirection.NONE,board.getCell(7, 16).getDoorStatus());
+	}
+	
+	@Test
+	public void testCalcAdjacencies()
+	{
+		//All walkways around
+		BoardCell cell = board.getCell(11,5);
+		LinkedList<BoardCell> testList = board.getAdjList(cell);
+		assertTrue(testList.contains(board.getCell(11, 4)));
+		assertTrue(testList.contains(board.getCell(11, 6)));
+		assertTrue(testList.contains(board.getCell(12, 5)));
+		assertTrue(testList.contains(board.getCell(10, 5)));
+		assertEquals(4, testList.size());
+		
+		//Top Left Corner of Board -- only cells of its kind around
+		cell = board.getCell(0,0);
+		testList = board.getAdjList(cell);
+		assertTrue(testList.contains(board.getCell(0, 1)));
+		assertTrue(testList.contains(board.getCell(1, 0)));
+		assertEquals(2, testList.size());
+		
+		//Bottom Left Corner of Board -- only cells of its kind around
+		cell = board.getCell(21,0);
+		testList = board.getAdjList(cell);
+		assertTrue(testList.contains(board.getCell(20, 0)));
+		assertTrue(testList.contains(board.getCell(21, 1)));
+		assertEquals(2, testList.size());
+		
+		//Top Right Corner of Board -- only cells of its kind around
+		cell = board.getCell(0,22);
+		testList = board.getAdjList(cell);
+		assertTrue(testList.contains(board.getCell(0, 21)));
+		assertTrue(testList.contains(board.getCell(1, 22)));
+		assertEquals(2, testList.size());
+		
+		//Bottom Right Corner of Board -- only cells of its kind around
+		cell = board.getCell(21,22);
+		testList = board.getAdjList(cell);
+		assertTrue(testList.contains(board.getCell(21, 21)));
+		assertTrue(testList.contains(board.getCell(20, 22)));
+		assertEquals(2, testList.size());
+		
+		//Cell next to room Without Doorway -- only two cells which are walkways
+		cell = board.getCell(4,22);
+		testList = board.getAdjList(cell);
+		assertTrue(testList.contains(board.getCell(3,22)));
+		assertTrue(testList.contains(board.getCell(4,21)));
+		assertEquals(2, testList.size());
+		
+		//Cell next to room Without Doorway -- only one walkway 
+		cell = board.getCell(0,11);
+		testList = board.getAdjList(cell);
+		assertTrue(testList.contains(board.getCell(1,11)));
+		assertEquals(1, testList.size());
+		
+		//Cell next to room With Doorway -- expect 4 cells
+		cell = board.getCell(8,12);
+		testList = board.getAdjList(cell);
+		assertTrue(testList.contains(board.getCell(8,13)));
+		assertTrue(testList.contains(board.getCell(8,11)));
+		assertTrue(testList.contains(board.getCell(7,12))); //This is door
+		assertTrue(testList.contains(board.getCell(9,12)));
+		assertEquals(4, testList.size());
+		
+		//Cell next to room With Doorway -- expect 4 cells
+		cell = board.getCell(9,17);
+		testList = board.getAdjList(cell);
+		assertTrue(testList.contains(board.getCell(8,17)));
+		assertTrue(testList.contains(board.getCell(10,17)));
+		assertTrue(testList.contains(board.getCell(9,18))); //This is door
+		assertTrue(testList.contains(board.getCell(9,16)));
+		assertEquals(4, testList.size());
+		
+		//Cell next to room With Doorway -- expect 3 cells
+		cell = board.getCell(19,2);
+		testList = board.getAdjList(cell);
+		assertTrue(testList.contains(board.getCell(19,1)));
+		assertTrue(testList.contains(board.getCell(19,3)));
+		assertTrue(testList.contains(board.getCell(22,20))); //This is door
+		assertEquals(3, testList.size());
+		
+		//Cell next to room With Doorway -- expect 3 cells
+		cell = board.getCell(1,15);
+		testList = board.getAdjList(cell);
+		assertTrue(testList.contains(board.getCell(0,15)));
+		assertTrue(testList.contains(board.getCell(2,15)));
+		assertTrue(testList.contains(board.getCell(1,16))); //This is door
+		assertEquals(3, testList.size());
+		
+		//Cell which is a Doorway -- expect 3 cells
+		cell = board.getCell(6,5);
+		testList = board.getAdjList(cell);
+		assertTrue(testList.contains(board.getCell(5,5))); //in room
+		assertTrue(testList.contains(board.getCell(7,5))); //walkway
+		assertTrue(testList.contains(board.getCell(6,6))); //This is another door in room
+		assertEquals(3, testList.size());
+		
+		//Cell which is a Doorway -- expect 3 cells
+		cell = board.getCell(17,12);
+		testList = board.getAdjList(cell);
+		assertTrue(testList.contains(board.getCell(17,13))); //in room
+		assertTrue(testList.contains(board.getCell(17,11))); //in room
+		assertTrue(testList.contains(board.getCell(18,12))); //in room
+		assertTrue(testList.contains(board.getCell(16,12))); //walkway
+		assertEquals(3, testList.size());
+	}
+	
+	@Test
+	public void testCalcTarget()
+	{
+		//Walkway and no door access and 3 Away
+		BoardCell cell = board.getCell(21,22);
+		board.calcTargets(cell, 3);
+		Set<BoardCell> targets = board.getTargets();
+		//System.out.println("Roll of 3 targets: " + targets);		//Uncomment if test fails
+		//Expected Cells in targets
+		assertTrue(targets.contains(board.getCell(20,22))); 
+		assertTrue(targets.contains(board.getCell(21,21)));
+		assertTrue(targets.contains(board.getCell(18,22)));
+		assertTrue(targets.contains(board.getCell(19,21)));
+		assertTrue(targets.contains(board.getCell(20,20)));
+		assertTrue(targets.contains(board.getCell(21,19)));
+		targets.clear();
+		
+		//Walkway and no door access and 6 Away
+		cell = board.getCell(21,22);
+		board.calcTargets(cell, 6);
+		targets = board.getTargets();
+		//System.out.println("Roll of 3 targets: " + targets);		//Uncomment if test fails
+		//Expected Cells in targets
+		assertTrue(targets.contains(board.getCell(2,20))); 
+		assertTrue(targets.contains(board.getCell(4,20)));
+		assertTrue(targets.contains(board.getCell(3,19)));
+		assertTrue(targets.contains(board.getCell(2,18)));
+		assertTrue(targets.contains(board.getCell(4,18)));
+		assertTrue(targets.contains(board.getCell(3,17)));
+		assertTrue(targets.contains(board.getCell(5,17)));
+		assertTrue(targets.contains(board.getCell(4,16)));
+		targets.clear();
+		
+		//Walkway and no door access and 2 Away
+		cell = board.getCell(0,11);
+		board.calcTargets(cell, 2);
+		targets = board.getTargets();
+		//System.out.println("Roll of 3 targets: " + targets);		//Uncomment if test fails
+		//Expected Cells in targets
+		assertTrue(targets.contains(board.getCell(2,11)));
+		targets.clear();
+		
+		//Walkway and no door access and 4 Away
+		cell = board.getCell(0,4);
+		board.calcTargets(cell, 4);
+		targets = board.getTargets();
+		//System.out.println("Roll of 3 targets: " + targets);		//Uncomment if test fails
+		//Expected Cells in targets
+		assertTrue(targets.contains(board.getCell(1,3))); 
+		assertTrue(targets.contains(board.getCell(2,4)));
+		assertTrue(targets.contains(board.getCell(3,3)));
+		targets.clear();
+		
+		//Walkway and  door access and 6 Away -- Only checking cells in a room
+		cell = board.getCell(11,5);
+		board.calcTargets(cell, 6);
+		targets = board.getTargets();
+		//System.out.println("Roll of 3 targets: " + targets);		//Uncomment if test fails
+		//Expected Cells in targets
+		assertTrue(targets.contains(board.getCell(5,5))); 
+		assertTrue(targets.contains(board.getCell(6,6)));
+		assertTrue(targets.contains(board.getCell(17,5)));
+		assertTrue(targets.contains(board.getCell(12,2)));
+		assertTrue(targets.contains(board.getCell(13,1)));
+		assertTrue(targets.contains(board.getCell(11,1)));
+		assertTrue(targets.contains(board.getCell(12,0)));
+		assertTrue(targets.contains(board.getCell(9,1)));
+		assertTrue(targets.contains(board.getCell(8,2)));
+		targets.clear();
+		
+		//In room and  door access outside and 2 Away -- Only checking cells not in a room
+		cell = board.getCell(17,12);
+		board.calcTargets(cell, 2);
+		targets = board.getTargets();
+		//System.out.println("Roll of 3 targets: " + targets);		//Uncomment if test fails
+		//Expected Cells in targets
+		assertTrue(targets.contains(board.getCell(15,12))); 
+		assertTrue(targets.contains(board.getCell(16,13)));
+		assertTrue(targets.contains(board.getCell(16,11)));
+		targets.clear();
+		
+		//In room and  door access outside and 3 Away -- Only checking cells not in a room
+		cell = board.getCell(7,9);
+		board.calcTargets(cell, 3);
+		targets = board.getTargets();
+		//System.out.println("Roll of 3 targets: " + targets);		//Uncomment if test fails
+		//Expected Cells in targets
+		assertTrue(targets.contains(board.getCell(8,7))); 
+		assertTrue(targets.contains(board.getCell(9,8)));
+		assertTrue(targets.contains(board.getCell(9,10)));
+		assertTrue(targets.contains(board.getCell(8,11)));
+		targets.clear();
 	}
 	
 	/*@Test //These are meant for a 4*4 board
