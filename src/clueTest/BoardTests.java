@@ -150,7 +150,6 @@ public class BoardTests {
 		board.calcTargets(cell, 3);
 		Set<BoardCell> targets = board.getTargets();
 		//System.out.println("Roll of 3 targets: " + targets);		//Uncomment if test fails
-		assertEquals(6, targets.size());						//Expect 6 Cells
 		//Expected Cells in targets
 		assertTrue(targets.contains(board.getCell(3, 0))); 
 		assertTrue(targets.contains(board.getCell(2, 1)));

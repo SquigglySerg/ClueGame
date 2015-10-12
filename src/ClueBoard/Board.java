@@ -167,8 +167,7 @@ public class Board {
 			for(String piece : hold) {
 				int column = 0;
 				// Since the first item in the string will never be comma, it checks to see if it is 
-				// a key for the rooms (Legend check)
-				//System.out.println(rooms.get(piece.charAt(0)));
+				// a key for the rooms (Legend check
 				if(rooms.get(piece.charAt(0)) != null) {
 					grid[row][column] = new BoardCell(row, column, piece.charAt(0));
 					if(1 < piece.length() && piece.charAt(1) != ',' && piece.charAt(1) != 'N') {
@@ -199,7 +198,6 @@ public class Board {
 						else {
 							grid[row][column].setDoorDirection('N');
 						}
-						//System.out.println(grid[row][column].getDoorDirection() + " " + grid[row][column].getInitial());
 						column++;
 					}
 				}
