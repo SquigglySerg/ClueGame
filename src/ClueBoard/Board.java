@@ -69,15 +69,15 @@ public class Board {
 		{
 			String line = scan.nextLine();
 			if(!(line.charAt(0) >= 'A' && line.charAt(0) <= 'Z')){
-				throw new BadConfigFormatException("Legend/RoomConfig File has an incorrect character '" + line.charAt(0) + "' as a room initial. Should be in [A-Z].");
+				throw new BadConfigFormatException("Legend/RoomConfig: File has an incorrect character '" + line.charAt(0) + "' as a room initial. Should be in [A-Z].");
 			}
 			if( (line.substring(line.indexOf(' ') + 1, line.lastIndexOf(',')).contains(",")) )
 			{
-				throw new BadConfigFormatException("Legend/RoomConfig File should only two commas expected per line. '" + line.substring(line.indexOf(' ') + 1, line.lastIndexOf(',')) + "' is being added as a room.");
+				throw new BadConfigFormatException("Legend/RoomConfig: Expected only two commas per line. '" + line.substring(line.indexOf(' ') + 1, line.lastIndexOf(',')) + "' is being added as a room.");
 			}
 			if( !(line.substring(line.lastIndexOf(',') + 1).contains("Other") || line.substring(line.lastIndexOf(',') + 1).contains("Card"))  )
 			{
-				throw new BadConfigFormatException("Legend/RoomConfig File a line does not contain 'Card' or 'Other'. Contains: '" + (line.substring(line.lastIndexOf(',') + 1)) +"'");
+				throw new BadConfigFormatException("Legend/RoomConfig: A line does not contain 'Card' or 'Other'. Contains: '" + (line.substring(line.lastIndexOf(',') + 1)) +"'");
 			}
 			rooms.put(line.charAt(0), line.substring(line.indexOf(' ') + 1, line.lastIndexOf(',')));
 		}
@@ -123,7 +123,7 @@ public class Board {
 			// Checks to see if a column size equals the first column size
 			// if false returns exception
 			if (check != columnCount) {
-				throw new BadConfigFormatException("There is a column size error for one row.");
+				throw new BadConfigFormatException("BoardConfig: There is a column size error for one row. '" + check + "' Columns instead of '" + columnCount + "'");
 			}
 		}
 		scan.close();
@@ -152,7 +152,7 @@ public class Board {
 				}
 			}
 			else {
-				throw new BadConfigFormatException("Room initial not in the legend.");
+				throw new BadConfigFormatException("BoardConfig: Room initial '" + rooms.get(piece.charAt(0)) + "' not in the legend.");
 			}
 			column++;
 			// Then it cycles through the string trying to find commas and
@@ -161,7 +161,7 @@ public class Board {
 				if (piece.charAt(i) == ',') {
 					// checks to see if the char is a key for rooms
 					if (rooms.get(piece.charAt(i + 1)) == null) {
-						throw new BadConfigFormatException("Room initial not in the legend");
+						throw new BadConfigFormatException("BoardConfig: Room initial '" + rooms.get(piece.charAt(i+1)) + "' not in the legend.");
 					}
 					// adds new BoardCell
 					grid[row][column] = new BoardCell(row, column, piece.charAt(i + 1));
