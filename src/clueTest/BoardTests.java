@@ -53,7 +53,6 @@ public class BoardTests {
 	{
 		try{
 			board.loadBoardConfig();
-			fail("blah");
 		}
 		catch(Exception e) {
 			assertEquals("Error", e.getMessage());
@@ -64,10 +63,10 @@ public class BoardTests {
 	public void testRoomInitials()
 	{
 		assertEquals('K',board.getCell(0, 0).getInitial());
-		assertEquals('D',board.getCell(0, 11).getInitial());
+		assertEquals('W',board.getCell(0, 11).getInitial());
 		assertEquals('F',board.getCell(19, 5).getInitial());
-		assertEquals('B',board.getCell(0, 21).getInitial());
-		assertEquals('G',board.getCell(12, 18).getInitial());
+		assertEquals('A',board.getCell(0, 21).getInitial());
+		assertEquals('S',board.getCell(12, 18).getInitial());
 		assertEquals('S',board.getCell(11, 20).getInitial());
 		assertEquals('A',board.getCell(1, 19).getInitial());
 		assertEquals('R',board.getCell(2, 13).getInitial());
