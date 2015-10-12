@@ -84,103 +84,99 @@ public class Board {
 		scan.close();
 	}
 	
-	public void loadBoardConfig() throws BadConfigFormatException
+	public void loadBoardConfig() throws BadConfigFormatException, FileNotFoundException
 
 	{
 		FileReader reader;
 		int columnCount = 1;
 		// ArrayList to hold each line temporarily also to count amount of rows
 		ArrayList<String> hold = new ArrayList<>();
-		try {
-			reader = new FileReader(boardConfigFile);
-			Scanner scan = new Scanner(reader);
-			// Takes first line of the layout and adds into the arraylist
-			String test = scan.nextLine();
-			hold.add(test);
-			int count = 0;
-			// Takes the first line of the layout and calculates the size of
-			// Columns using commas since amount of
-			// initials should equal all commas + 1
-			while (count < test.length()) {
-				if (test.charAt(count) == ',' || test.charAt(count) == '\n') {
-					columnCount++;
+		reader = new FileReader(boardConfigFile);
+		Scanner scan = new Scanner(reader);
+		// Takes first line of the layout and adds into the arraylist
+		String test = scan.nextLine();
+		hold.add(test);
+		int count = 0;
+		// Takes the first line of the layout and calculates the size of
+		// Columns using commas since amount of
+		// initials should equal all commas + 1
+		while (count < test.length()) {
+			if (test.charAt(count) == ',') {
+				columnCount++;
+			}
+			count++;
+		}
+		// Then goes through the rest of the layout collecting each line
+		while (scan.hasNextLine()) {
+			String line = scan.nextLine();
+			hold.add(line);
+			count = 0;
+			int check = 1;
+			// Once again checking all the commas in the line for the column
+			// size
+			while (count < line.length()) {
+				if (line.charAt(count) == ',') {
+					check++;
 				}
 				count++;
 			}
-			// Then goes through the rest of the layout collecting each line
-			while (scan.hasNextLine()) {
-				String line = scan.nextLine();
-				hold.add(line);
-				count = 0;
-				int check = 1;
-				// Once again checking all the commas in the line for the column
-				// size
-				while (count < line.length()) {
-					if (line.charAt(count) == ',' || line.charAt(count) == '\n') {
-						check++;
-					}
-					count++;
+			// Checks to see if a column size equals the first column size
+			// if false returns exception
+			if (check != columnCount) {
+				throw new BadConfigFormatException("There is a column size error for one row.");
+			}
+		}
+		scan.close();
+		// Uses the arraylist size as ROWS and the column count at the
+		// beginning for COLUMNS
+		this.ROWS = hold.size();
+		this.COLUMNS = columnCount;
+		// Generates the initial setup for the grid
+		grid = new BoardCell[this.ROWS][this.COLUMNS];
+		// starts at the top row
+		int row = 0;
+		// Takes each line and goes through to find initials and assign them
+		// into the grid
+		for (String piece : hold) {
+			int column = 0;
+			// Since the first item in the string will never be comma, it
+			// checks to see if it is
+			// a key for the rooms (Legend check
+			if (rooms.get(piece.charAt(0)) != null) {
+				grid[row][column] = new BoardCell(row, column, piece.charAt(0));
+				if (1 < piece.length() && piece.charAt(1) != ',' && piece.charAt(1) != 'N') {
+					grid[row][column].setDoorDirection(piece.charAt(1));
 				}
-				// Checks to see if a column size equals the first column size
-				// if false returns exception
-				if (check != columnCount) {
-					throw new BadConfigFormatException();
+				else {
+					grid[row][column].setDoorDirection('N');
 				}
 			}
-			scan.close();
-			// Uses the arraylist size as ROWS and the column count at the
-			// beginning for COLUMNS
-			this.ROWS = hold.size();
-			this.COLUMNS = columnCount;
-			// Generates the initial setup for the grid
-			grid = new BoardCell[this.ROWS][this.COLUMNS];
-			// starts at the top row
-			int row = 0;
-			// Takes each line and goes through to find initials and assign them
-			// into the grid
-			for (String piece : hold) {
-				int column = 0;
-				// Since the first item in the string will never be comma, it
-				// checks to see if it is
-				// a key for the rooms (Legend check
-				if (rooms.get(piece.charAt(0)) != null) {
-					grid[row][column] = new BoardCell(row, column, piece.charAt(0));
-					if (1 < piece.length() && piece.charAt(1) != ',' && piece.charAt(1) != 'N') {
-						grid[row][column].setDoorDirection(piece.charAt(1));
+			else {
+				throw new BadConfigFormatException("Room initial not in the legend.");
+			}
+			column++;
+			// Then it cycles through the string trying to find commas and
+			// taking the char after
+			for (int i = 1; i < piece.length(); i++) {
+				if (piece.charAt(i) == ',') {
+					// checks to see if the char is a key for rooms
+					if (rooms.get(piece.charAt(i + 1)) == null) {
+						throw new BadConfigFormatException("Room initial not in the legend");
+					}
+					// adds new BoardCell
+					grid[row][column] = new BoardCell(row, column, piece.charAt(i + 1));
+					// then checks to see if there another char after
+					// signifying a door and sets door status
+					if (i + 2 < piece.length() && piece.charAt(i + 2) != ',' && piece.charAt(i + 2) != 'N') {
+						grid[row][column].setDoorDirection(piece.charAt(i + 2));
 					}
 					else {
 						grid[row][column].setDoorDirection('N');
 					}
+					column++;
 				}
-				else {
-					throw new BadConfigFormatException();
-				}
-				column++;
-				// Then it cycles through the string trying to find commas and
-				// taking the char after
-				for (int i = 1; i < piece.length(); i++) {
-					if (piece.charAt(i) == ',') {
-						// checks to see if the char is a key for rooms
-						if (rooms.get(piece.charAt(i + 1)) == null) {
-							throw new BadConfigFormatException();
-						}
-						// adds new BoardCell
-						grid[row][column] = new BoardCell(row, column, piece.charAt(i + 1));
-						// then checks to see if there another char after
-						// signifying a door and sets door status
-						if (i + 2 < piece.length() && piece.charAt(i + 2) != ',' && piece.charAt(i + 2) != 'N') {
-							grid[row][column].setDoorDirection(piece.charAt(i + 2));
-						}
-						else {
-							grid[row][column].setDoorDirection('N');
-						}
-						column++;
-					}
-				}
-				row++;
 			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			row++;
 		}
 	}
 
