@@ -71,7 +71,7 @@ public class Board {
 		}
 	}
 	
-	public void loadRoomConfig() 
+	public void loadRoomConfig() throws BadConfigFormatException 
 	{
 		// this.roomconfigfiel = roomconfigfilename;
 		// read fromfile
@@ -85,8 +85,15 @@ public class Board {
 			while(scan.hasNextLine())
 			{
 				String line = scan.nextLine();
-				System.out.println(line.charAt(0));
-				System.out.println(line.substring(line.indexOf(' ') + 1, line.lastIndexOf(',')));
+//				int count = 0;
+//				for(int i = 0; i < line.length(); i++) {
+//					if(line.charAt(i) == ',') {
+//						count++;
+//					}
+//				}
+//				if(count != 3) {
+//					throw new BadConfigFormatException();
+//				}
 				rooms.put(line.charAt(0), line.substring(line.indexOf(' ') + 1, line.lastIndexOf(',')));
 			}
 			scan.close();
@@ -103,8 +110,8 @@ public class Board {
 		// column = numitems.row 1
 		// row = num of rows
 		// put characters in board cell
-		System.out.println("Checkpoint");
-		System.out.println();
+		//System.out.println("Checkpoint");
+		//System.out.println();
 		FileReader reader;
 		int columnCount = 1;
 		// ArrayList to hold each line temporarily also to count amount of rows
@@ -145,6 +152,7 @@ public class Board {
 				if(check != columnCount) {
 					throw new BadConfigFormatException();
 				}
+				
 			}
 			scan.close();
 			
@@ -160,7 +168,7 @@ public class Board {
 				int column = 0;
 				// Since the first item in the string will never be comma, it checks to see if it is 
 				// a key for the rooms (Legend check)
-				System.out.println(rooms.get(piece.charAt(0)));
+				//System.out.println(rooms.get(piece.charAt(0)));
 				if(rooms.get(piece.charAt(0)) != null) {
 					grid[row][column] = new BoardCell(row, column, piece.charAt(0));
 					if(1 < piece.length() && piece.charAt(1) != ',' && piece.charAt(1) != 'N') {
@@ -191,7 +199,7 @@ public class Board {
 						else {
 							grid[row][column].setDoorDirection('N');
 						}
-						System.out.println(grid[row][column].getDoorDirection() + " " + grid[row][column].getInitial());
+						//System.out.println(grid[row][column].getDoorDirection() + " " + grid[row][column].getInitial());
 						column++;
 					}
 				}
