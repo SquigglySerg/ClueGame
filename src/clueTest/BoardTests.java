@@ -102,28 +102,28 @@ public class BoardTests {
 		assertTrue(testList.contains(board.getCell(10, 5)));
 		assertEquals(4, testList.size());
 		
-		//Top Left Corner of Board -- only cells of its kind around
+		//Top Left Corner of Board -- only cells of its kind around room
 		cell = board.getCell(0,0);
 		testList = board.getAdjList(cell);
-		assertTrue(testList.contains(board.getCell(0, 1)));
-		assertTrue(testList.contains(board.getCell(1, 0)));
-		assertEquals(2, testList.size());
+		//assertTrue(testList.contains(board.getCell(0, 1)));
+		//assertTrue(testList.contains(board.getCell(1, 0)));
+		assertEquals(0, testList.size());
 		
-		//Bottom Left Corner of Board -- only cells of its kind around
+		//Bottom Left Corner of Board -- only cells of its kind around room
 		cell = board.getCell(21,0);
 		testList = board.getAdjList(cell);
-		assertTrue(testList.contains(board.getCell(20, 0)));
-		assertTrue(testList.contains(board.getCell(21, 1)));
-		assertEquals(2, testList.size());
+		//assertTrue(testList.contains(board.getCell(20, 0)));
+		//assertTrue(testList.contains(board.getCell(21, 1)));
+		assertEquals(0, testList.size());
 		
-		//Top Right Corner of Board -- only cells of its kind around
+		//Top Right Corner of Board -- only cells of its kind around room
 		cell = board.getCell(0,22);
 		testList = board.getAdjList(cell);
-		assertTrue(testList.contains(board.getCell(0, 21)));
-		assertTrue(testList.contains(board.getCell(1, 22)));
-		assertEquals(2, testList.size());
+		//assertTrue(testList.contains(board.getCell(0, 21)));
+		//assertTrue(testList.contains(board.getCell(1, 22)));
+		assertEquals(0, testList.size());
 		
-		//Bottom Right Corner of Board -- only cells of its kind around
+		//Bottom Right Corner of Board -- only cells of its kind around walkway
 		cell = board.getCell(21,22);
 		testList = board.getAdjList(cell);
 		assertTrue(testList.contains(board.getCell(21, 21)));
@@ -166,7 +166,7 @@ public class BoardTests {
 		testList = board.getAdjList(cell);
 		assertTrue(testList.contains(board.getCell(19,1)));
 		assertTrue(testList.contains(board.getCell(19,3)));
-		assertTrue(testList.contains(board.getCell(22,20))); //This is door
+		assertTrue(testList.contains(board.getCell(20,2))); //This is door
 		assertEquals(3, testList.size());
 		
 		//Cell next to room With Doorway -- expect 3 cells
@@ -177,22 +177,22 @@ public class BoardTests {
 		assertTrue(testList.contains(board.getCell(1,16))); //This is door
 		assertEquals(3, testList.size());
 		
-		//Cell which is a Doorway -- expect 3 cells
+		//Cell which is a Doorway -- expect 1 cells
 		cell = board.getCell(6,5);
 		testList = board.getAdjList(cell);
-		assertTrue(testList.contains(board.getCell(5,5))); //in room
+		//assertTrue(testList.contains(board.getCell(5,5))); //in room
 		assertTrue(testList.contains(board.getCell(7,5))); //walkway
-		assertTrue(testList.contains(board.getCell(6,6))); //This is another door in room
-		assertEquals(3, testList.size());
+		System.out.println(testList);
+		assertEquals(1, testList.size());
 		
-		//Cell which is a Doorway -- expect 3 cells
+		//Cell which is a Doorway -- expect 1 cells
 		cell = board.getCell(17,12);
 		testList = board.getAdjList(cell);
-		assertTrue(testList.contains(board.getCell(17,13))); //in room
-		assertTrue(testList.contains(board.getCell(17,11))); //in room
-		assertTrue(testList.contains(board.getCell(18,12))); //in room
+		//assertTrue(testList.contains(board.getCell(17,13))); //in room
+		//assertTrue(testList.contains(board.getCell(17,11))); //in room
+		//assertTrue(testList.contains(board.getCell(18,12))); //in room
 		assertTrue(testList.contains(board.getCell(16,12))); //walkway
-		assertEquals(3, testList.size());
+		assertEquals(1, testList.size());
 	}
 	
 	@Test
