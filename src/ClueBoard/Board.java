@@ -182,11 +182,14 @@ public class Board {
 			for(int j = 0; j < COLUMNS; j++)
 			{
 				LinkedList<BoardCell> adjList = new LinkedList<BoardCell>();
-				//Add TOP, BOTTOM, RIGHT, and LEFT Cells to list if they exist
-				if(i+1 < ROWS){adjList.add(grid[i+1][j]);}
-				if(i-1 >= 0){adjList.add(grid[i-1][j]);}
-				if(j+1 < COLUMNS){adjList.add(grid[i][j+1]);}
-				if(j-1 >= 0){adjList.add(grid[i][j-1]);}
+				if(!grid[i][j].isRoom() || grid[i][j].getDoorStatus() != DoorDirection.NONE)
+				{
+					//Add TOP, BOTTOM, RIGHT, and LEFT Cells to list if they exist
+					if(i+1 < ROWS && ( grid[i+1][j].getDoorStatus().equals(DoorDirection.UP) || grid[i+1][j].isWalkWay() /*|| !grid[i+1][j].isRoom()*/ ) ){adjList.add(grid[i+1][j]);}
+					if(i-1 >= 0 && ( grid[i-1][j].getDoorStatus() == DoorDirection.DOWN || grid[i-1][j].isWalkWay() /*|| !grid[i-1][j].isRoom()*/ ) ){adjList.add(grid[i-1][j]);}
+					if(j+1 < COLUMNS && ( grid[i][j+1].getDoorStatus() == DoorDirection.LEFT || grid[i][j+1].isWalkWay() /*|| !grid[i][j+1].isRoom()*/ ) ){adjList.add(grid[i][j+1]);}
+					if(j-1 >= 0 && ( grid[i][j-1].getDoorStatus() == DoorDirection.RIGHT || grid[i][j-1].isWalkWay() /*|| !grid[i][j-1].isRoom()*/ ) ){adjList.add(grid[i][j-1]);}
+				}
 				adjMtx.put(grid[i][j], adjList);
 			}
 		}

@@ -34,13 +34,13 @@ public class BoardCell {
 	
 	public boolean isWalkWay()
 	{
-		return false;
+		return (initial =='W');
 	}
 	
 	public boolean isRoom()
 	{
 		
-		return false;
+		return (initial !='W');
 	}
 	
 	public boolean isDoorway()
