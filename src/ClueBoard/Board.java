@@ -98,8 +98,7 @@ public class Board {
 		hold.add(test);
 		int count = 0;
 		// Takes the first line of the layout and calculates the size of
-		// Columns using commas since amount of
-		// initials should equal all commas + 1
+		// Columns using commas since amount of initials should equal all commas + 1
 		while (count < test.length()) {
 			if (test.charAt(count) == ',') {
 				columnCount++;
@@ -112,8 +111,7 @@ public class Board {
 			hold.add(line);
 			count = 0;
 			int check = 1;
-			// Once again checking all the commas in the line for the column
-			// size
+			// Once again checking all the commas in the line for the column size
 			while (count < line.length()) {
 				if (line.charAt(count) == ',') {
 					check++;
@@ -140,8 +138,7 @@ public class Board {
 		for (String piece : hold) {
 			int column = 0;
 			// Since the first item in the string will never be comma, it
-			// checks to see if it is
-			// a key for the rooms (Legend check
+			// checks to see if it is a key for the rooms (Legend check
 			if (rooms.get(piece.charAt(0)) != null) {
 				grid[row][column] = new BoardCell(row, column, piece.charAt(0));
 				if (1 < piece.length() && piece.charAt(1) != ',' && piece.charAt(1) != 'N') {
@@ -155,8 +152,7 @@ public class Board {
 				throw new BadConfigFormatException("BoardConfig: Room initial '" + rooms.get(piece.charAt(0)) + "' not in the legend.");
 			}
 			column++;
-			// Then it cycles through the string trying to find commas and
-			// taking the char after
+			// Then it cycles through the string trying to find commas and taking the char after
 			for (int i = 1; i < piece.length(); i++) {
 				if (piece.charAt(i) == ',') {
 					// checks to see if the char is a key for rooms
@@ -165,8 +161,7 @@ public class Board {
 					}
 					// adds new BoardCell
 					grid[row][column] = new BoardCell(row, column, piece.charAt(i + 1));
-					// then checks to see if there another char after
-					// signifying a door and sets door status
+					// then checks to see if there another char after signifying a door and sets door status
 					if (i + 2 < piece.length() && piece.charAt(i + 2) != ',' && piece.charAt(i + 2) != 'N') {
 						grid[row][column].setDoorDirection(piece.charAt(i + 2));
 					}
