@@ -223,7 +223,6 @@ public class CR_BoardAdjTargetTests {
 	
 	// Tests of just walkways plus one door, 6 steps
 	// These are LIGHT BLUE on the planning spreadsheet
-
 	@Test
 	public void testTargetsSixSteps() {
 		board.calcTargets(14, 0, 6);
@@ -240,7 +239,6 @@ public class CR_BoardAdjTargetTests {
 	
 	// Test getting into a room
 	// These are LIGHT BLUE on the planning spreadsheet
-
 	@Test 
 	public void testTargetsIntoRoom()
 	{

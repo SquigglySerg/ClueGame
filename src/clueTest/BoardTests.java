@@ -182,7 +182,7 @@ public class BoardTests {
 		testList = board.getAdjList(cell);
 		//assertTrue(testList.contains(board.getCell(5,5))); //in room
 		assertTrue(testList.contains(board.getCell(7,5))); //walkway
-		System.out.println(testList);
+		//System.out.println(testList);
 		assertEquals(1, testList.size());
 		
 		//Cell which is a Doorway -- expect 1 cells
@@ -200,7 +200,7 @@ public class BoardTests {
 	{
 		//Walkway and no door access and 3 Away
 		BoardCell cell = board.getCell(21,22);
-		board.calcTargets(cell, 3);
+		board.calcTargets(21, 22, 3);
 		Set<BoardCell> targets = board.getTargets();
 		//System.out.println("Roll of 3 targets: " + targets);		//Uncomment if test fails
 		//Expected Cells in targets
@@ -218,14 +218,17 @@ public class BoardTests {
 		targets = board.getTargets();
 		//System.out.println("Roll of 3 targets: " + targets);		//Uncomment if test fails
 		//Expected Cells in targets
-		assertTrue(targets.contains(board.getCell(2,20))); 
-		assertTrue(targets.contains(board.getCell(4,20)));
-		assertTrue(targets.contains(board.getCell(3,19)));
-		assertTrue(targets.contains(board.getCell(2,18)));
-		assertTrue(targets.contains(board.getCell(4,18)));
-		assertTrue(targets.contains(board.getCell(3,17)));
-		assertTrue(targets.contains(board.getCell(5,17)));
-		assertTrue(targets.contains(board.getCell(4,16)));
+		assertEquals(10, targets.size());
+		assertTrue(targets.contains(board.getCell(19,22))); 
+		assertTrue(targets.contains(board.getCell(19,20)));
+		assertTrue(targets.contains(board.getCell(18,19)));
+		assertTrue(targets.contains(board.getCell(19,18)));
+		assertTrue(targets.contains(board.getCell(20,21)));
+		assertTrue(targets.contains(board.getCell(18,21)));
+		assertTrue(targets.contains(board.getCell(20, 17)));
+		assertTrue(targets.contains(board.getCell(21, 18)));
+		assertTrue(targets.contains(board.getCell(20, 19)));
+		assertTrue(targets.contains(board.getCell(21, 20)));
 		targets.clear();
 		
 		//Walkway and no door access and 2 Away
@@ -254,15 +257,13 @@ public class BoardTests {
 		targets = board.getTargets();
 		//System.out.println("Roll of 3 targets: " + targets);		//Uncomment if test fails
 		//Expected Cells in targets
-		assertTrue(targets.contains(board.getCell(5,5))); 
-		assertTrue(targets.contains(board.getCell(6,6)));
+		assertTrue(targets.contains(board.getCell(6,6))); 
+		assertTrue(targets.contains(board.getCell(6,5)));
 		assertTrue(targets.contains(board.getCell(17,5)));
 		assertTrue(targets.contains(board.getCell(12,2)));
-		assertTrue(targets.contains(board.getCell(13,1)));
-		assertTrue(targets.contains(board.getCell(11,1)));
-		assertTrue(targets.contains(board.getCell(12,0)));
-		assertTrue(targets.contains(board.getCell(9,1)));
-		assertTrue(targets.contains(board.getCell(8,2)));
+		assertTrue(targets.contains(board.getCell(11,2)));
+		assertTrue(targets.contains(board.getCell(12,2)));
+		assertTrue(targets.contains(board.getCell(9,2)));
 		targets.clear();
 		
 		//In room and  door access outside and 2 Away -- Only checking cells not in a room

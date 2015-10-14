@@ -26,13 +26,12 @@ public class Board {
 		super();
 		this.adjMtx = new HashMap<>();
 		this.visited = new HashSet<>();
-		this.targets = new HashSet<>();
+		//this.targets = new HashSet<>();
 		this.grid = new BoardCell[ROWS][COLUMNS];
 		this.ROWS = 22;
 		this.COLUMNS = 23;
 		boardConfigFile = "ClueLayout.csv";
 		roomConfigFile = "ClueLegend.txt";
-		//initialize();
 	}
 	
 	public Board(String boardConfigFileName, String roomConfigFileName)
@@ -40,7 +39,7 @@ public class Board {
 		super();
 		this.adjMtx = new HashMap<>();
 		this.visited = new HashSet<>();
-		this.targets = new HashSet<>();
+		//this.targets = new HashSet<>();
 		boardConfigFile = boardConfigFileName;
 		roomConfigFile = roomConfigFileName;
 	}
@@ -224,20 +223,22 @@ public class Board {
 		visited.add(initialCell);
 		for(BoardCell i : adjMtx.get(initialCell))
 		{
-			//visited.add(i);
-			if(pathLength == 1)
-				if(!visited.contains(i))
+			if(pathLength == 1 || i.getDoorDirection() != DoorDirection.NONE) {  
+				if(!visited.contains(i)) {
 					targets.add(i);
-			else
-				if(!visited.contains(i))
+				}
+			}
+			else 
+				if(!visited.contains(i)) {
 					calcTargets(i, pathLength-1);
-			//visited.remove(i);
+				}
 		}
 		visited.remove(initialCell);
 	}
 	
 	public void calcTargets(int row, int column, int pathLength)
 	{
+		this.targets = new HashSet<>();
 		calcTargets(grid[row][column], pathLength);
 	}
 
