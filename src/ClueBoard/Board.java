@@ -2,6 +2,7 @@ package ClueBoard;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,7 +27,7 @@ public class Board {
 		super();
 		this.adjMtx = new HashMap<>();
 		this.visited = new HashSet<>();
-		//this.targets = new HashSet<>();
+		this.targets = new HashSet<>();
 		this.grid = new BoardCell[ROWS][COLUMNS];
 		this.ROWS = 22;
 		this.COLUMNS = 23;
@@ -39,7 +40,7 @@ public class Board {
 		super();
 		this.adjMtx = new HashMap<>();
 		this.visited = new HashSet<>();
-		//this.targets = new HashSet<>();
+		this.targets = new HashSet<>();
 		boardConfigFile = boardConfigFileName;
 		roomConfigFile = roomConfigFileName;
 	}
@@ -238,7 +239,8 @@ public class Board {
 	
 	public void calcTargets(int row, int column, int pathLength)
 	{
-		this.targets = new HashSet<>();
+		//this.targets = new HashSet<>();
+		targets.clear();
 		calcTargets(grid[row][column], pathLength);
 	}
 

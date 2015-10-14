@@ -200,7 +200,7 @@ public class BoardTests {
 	{
 		//Walkway and no door access and 3 Away
 		BoardCell cell = board.getCell(21,22);
-		board.calcTargets(21, 22, 3);
+		board.calcTargets(cell, 3);
 		Set<BoardCell> targets = board.getTargets();
 		//System.out.println("Roll of 3 targets: " + targets);		//Uncomment if test fails
 		//Expected Cells in targets
