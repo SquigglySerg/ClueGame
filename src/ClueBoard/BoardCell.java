@@ -45,7 +45,6 @@ public class BoardCell {
 	
 	public boolean isDoorway()
 	{
-		//System.out.println(doorStatus);
 		if(this.doorStatus != DoorDirection.NONE) {
 			return true;
 		}
